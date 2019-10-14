@@ -1,7 +1,8 @@
-FROM node:12.11-alpine
+FROM node:12-alpine
 
 # Installs latest Chromium (76) package.
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
+      udev \
       chromium \
       nss \
       freetype \
@@ -9,13 +10,12 @@ RUN apk add --no-cache \
       harfbuzz \
       ca-certificates \
       ttf-freefont \
-      nodejs \
-      yarn
+      git
 
 RUN npm -g config set user root
 
 # Puppeteer v1.17.0 works with Chromium 76.
-RUN npm install -g puppeteer@1.17.0
+RUN npm install -g puppeteer@1.20.0
 
 # Add user so we don't need --no-sandbox.
 RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
